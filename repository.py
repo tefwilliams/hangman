@@ -1,9 +1,12 @@
 
 import random
+from word import Word
 
-def get_word() -> str:
+
+def get_word() -> Word:
     word = random.choice(word_list)
-    return word.upper()
+    return Word(word)
+
 
 word_list: list[str] = [
     "company",
@@ -37,6 +40,7 @@ word_list: list[str] = [
     "aboriginal",
     "scarce"
 ]
+
 
 game_stages: list[str] = [
         # final state: head, torso, both arms, and both legs
