@@ -7,4 +7,8 @@ class Word(str):
         return super().__new__(cls, word.upper())
 
     def __init__(self: Word, word: str) -> None:
-        self.length = len(self)
+        self.__length = len(self)
+
+    @property
+    def length(self: Word) -> int:
+        return self.__length

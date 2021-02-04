@@ -3,9 +3,13 @@ import random
 from word import Word
 
 
-def get_word() -> Word:
+def get_random_word() -> Word:
     word = random.choice(word_list)
     return Word(word)
+
+
+def display_hangman(tries: int) -> str:
+    return game_stages[tries]
 
 
 word_list: list[str] = [

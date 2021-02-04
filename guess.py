@@ -4,11 +4,17 @@ from word import Word
 
 
 class Guess(Word):
-    def __new__(cls: type[Guess], guess: str):
-        return super().__new__(cls, guess)
+    def __init__(self: Guess, guess: str) -> None:
+        super().__init__(guess)
 
-    def is_valid_letter(self: Guess) -> bool:
-        return self.length == 1 and self.isalpha()
+        self.__is_letter = self.length == 1
+        self.__is_valid = self.isalpha()
 
-    def is_valid_word(self: Guess, word: Word) -> bool:
-        return self.length == word.length and self.isalpha()
+    @property
+    def is_letter(self: Guess) -> bool:
+        return self.__is_letter
+
+    @property
+    def is_valid(self: Guess) -> bool:
+        return self.__is_valid
+
