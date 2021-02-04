@@ -1,5 +1,6 @@
 
 from __future__ import annotations
+from word import Word
 from guess import Guess
 from repository import get_random_word
 
@@ -53,5 +54,5 @@ class Game:
         return self.__current_status
 
     @property
-    def word(self: Game) -> str:
+    def word(self: Game) -> Word:
         return self.__word

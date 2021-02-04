@@ -9,10 +9,11 @@ def play(game: Game):
     print_starting_text(game)
     word = game.word
 
-    while not game.won() or not game.lost():
+    while not game.won() and not game.lost():
         guess = Guess(input("Please guess a letter or word: "))
+        guess_is_word_or_letter = guess.is_letter or guess.length == word.length
 
-        if guess.is_valid:
+        if guess.is_valid and guess_is_word_or_letter:
             evaluate_guess(game, guess)
 
         else:
@@ -23,10 +24,10 @@ def play(game: Game):
         print("\n")
 
     if game.won():
-        print("Congrats, you guessed the word! You win!")
+        print("Congrats, you guessed the word! You win! \n")
 
     else:
-        print("Sorry, you ran out of tries. The word was: %s. Maybe next time!" %word)
+        print("Sorry, you ran out of tries. The word was: %s. Maybe next time! \n" %word)
 
 
 def print_starting_text(game: Game):
