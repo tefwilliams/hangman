@@ -9,6 +9,7 @@ class Game:
     __tries = 6
     __guessed_letters: list[str] = []
     __guessed_words: list[str] = []
+    __current_status: str
 
     def __init__(self: Game) -> None:
         self.__word = get_random_word()
@@ -24,26 +25,43 @@ class Game:
         if guess.is_letter:
             return guess in self.__guessed_letters
 
-        return guess in self.__guessed_words
+        elif guess.is_word(self.word):
+            return guess in self.__guessed_words
+
+        raise ValueError("Guess must be a letter or word")
 
     def made_incorrect_guess(self: Game, guess: Guess) -> None:
         self.__tries -= 1
 
-        self.__guessed_letters.append(guess) if guess.is_letter else self.__guessed_words.append(guess)
+        if guess.is_letter:
+            self.__guessed_letters.append(guess)
+            
+        elif guess.is_word(self.word):
+            self.__guessed_words.append(guess)
+
+        else:
+            raise ValueError("Guess must be a letter or word")
 
     def made_correct_guess(self: Game, guess: Guess) -> None:
         if guess.is_letter:
             self.__guessed_letters.append(guess)
-            word_as_list = list(self.__current_status)
-            indices = [i for i, letter in enumerate(self.__word) if letter == guess]
+            self.__update_current_status(guess)
 
-            for index in indices:
-                word_as_list[index] = guess
-
-            self.__current_status = "".join(word_as_list)
+        elif guess.is_word(self.word):
+            self.__current_status = self.__word
 
         else:
-            self.__current_status = self.__word
+            raise ValueError("Guess must be a letter or word")        
+
+    def __update_current_status(self: Game, guess: Guess) -> None:
+        word_as_list = list(self.__current_status)
+
+        indices = [i for i, letter in enumerate(self.__word) if letter == guess]
+
+        for index in indices:
+            word_as_list[index] = guess
+
+        self.__current_status = "".join(word_as_list)
 
     @property
     def tries(self: Game) -> int:
@@ -56,3 +74,4 @@ class Game:
     @property
     def word(self: Game) -> Word:
         return self.__word
+        

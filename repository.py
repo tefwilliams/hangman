@@ -1,6 +1,17 @@
 
 import random
 from word import Word
+from guess import Guess
+
+
+def get_valid_guess(word: Word) -> Guess:
+    while True:
+        guess = Guess(input("Please guess a letter or word: "))
+
+        if guess.is_letter or guess.is_word(word):
+            return guess
+
+        print("\n" + "Not a valid guess" + "\n")
 
 
 def get_random_word() -> Word:

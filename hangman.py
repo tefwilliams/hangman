@@ -2,22 +2,20 @@
 from __future__ import annotations
 from guess import Guess
 from game import Game
-from repository import display_hangman
+from repository import display_hangman, get_valid_guess
 
 
 def play(game: Game):
-    print_starting_text(game)
     word = game.word
 
-    while not game.won() and not game.lost():
-        guess = Guess(input("Please guess a letter or word: "))
-        guess_is_word_or_letter = guess.is_letter or guess.length == word.length
+    print("Let's play Hangman!")
+    print(display_hangman(game.tries))
+    print(game.current_status)
+    print("\n")
 
-        if guess.is_valid and guess_is_word_or_letter:
-            evaluate_guess(game, guess)
-
-        else:
-            print("Not a valid guess.")
+    while not (game.won() or game.lost()):
+        guess = get_valid_guess(word)
+        evaluate_guess(game, guess)
 
         print(display_hangman(game.tries))
         print(game.current_status)
@@ -28,13 +26,6 @@ def play(game: Game):
 
     else:
         print("Sorry, you ran out of tries. The word was: %s. Maybe next time! \n" %word)
-
-
-def print_starting_text(game: Game):
-    print("Let's play Hangman!")
-    print(display_hangman(game.tries))
-    print(game.current_status)
-    print("\n")
 
 
 def evaluate_guess(game: Game, guess: Guess) -> None:
