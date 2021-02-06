@@ -6,13 +6,12 @@ from guess import Guess
 
 def get_valid_guess(word: Word) -> Guess:
     while True:
-        guess = Guess(input("Please guess a letter or word: "))
+        try:
+            return Guess(input("Please guess a letter or word: "), word)
 
-        if guess.is_letter or guess.is_word(word):
-            return guess
-
-        print("\n" + "Not a valid guess" + "\n")
-
+        except AssertionError:
+            print("\n" + "Not a valid guess" + "\n")
+            
 
 def get_random_word() -> Word:
     word = random.choice(word_list)

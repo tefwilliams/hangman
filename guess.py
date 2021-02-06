@@ -4,14 +4,18 @@ from word import Word
 
 
 class Guess(Word):
-    def __init__(self: Guess, guess: str) -> None:
+    def __init__(self: Guess, guess: str, word: Word) -> None:
         super().__init__(guess)
-        self.__is_valid = self.isalpha()
+        self.word = word
+
+        assert self.isalpha()
+        assert self.is_letter or self.is_word
 
     @property
     def is_letter(self: Guess) -> bool:
-        return self.__is_valid and self.length == 1
+        return self.length == 1
 
-    def is_word(self: Guess, word: Word) -> bool:
-        return self.__is_valid and self.length == word.length
+    @property
+    def is_word(self: Guess) -> bool:
+        return self.length == self.word.length
 
