@@ -25,43 +25,32 @@ class Game:
         if guess.is_letter:
             return guess in self.__guessed_letters
 
-        elif guess.is_word(self.word):
-            return guess in self.__guessed_words
-
-        raise ValueError("Guess must be a letter or word")
+        return guess in self.__guessed_words
 
     def made_incorrect_guess(self: Game, guess: Guess) -> None:
         self.__tries -= 1
 
         if guess.is_letter:
-            self.__guessed_letters.append(guess)
+            return self.__guessed_letters.append(guess)
             
-        elif guess.is_word(self.word):
-            self.__guessed_words.append(guess)
-
-        else:
-            raise ValueError("Guess must be a letter or word")
+        self.__guessed_words.append(guess)
 
     def made_correct_guess(self: Game, guess: Guess) -> None:
         if guess.is_letter:
             self.__guessed_letters.append(guess)
-            self.__update_current_status(guess)
+            return self.__update_current_status(guess)
 
-        elif guess.is_word(self.word):
-            self.__current_status = self.__word
-
-        else:
-            raise ValueError("Guess must be a letter or word")        
+        self.__current_status = self.__word
 
     def __update_current_status(self: Game, guess: Guess) -> None:
-        word_as_list = list(self.__current_status)
+        current_status_as_list = list(self.__current_status)
 
         indices = [i for i, letter in enumerate(self.__word) if letter == guess]
 
         for index in indices:
-            word_as_list[index] = guess
+            current_status_as_list[index] = guess
 
-        self.__current_status = "".join(word_as_list)
+        self.__current_status = "".join(current_status_as_list)
 
     @property
     def tries(self: Game) -> int:

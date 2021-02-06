@@ -23,7 +23,7 @@ def display_hangman(tries: int) -> str:
     return game_stages[tries]
 
 
-word_list: list[str] = [
+word_list = [
     "company",
     "minister",
     "scrawny",
@@ -57,7 +57,7 @@ word_list: list[str] = [
 ]
 
 
-game_stages: list[str] = [
+game_stages = [
         # final state: head, torso, both arms, and both legs
         """
             --------

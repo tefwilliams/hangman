@@ -6,7 +6,6 @@ from word import Word
 class Guess(Word):
     def __init__(self: Guess, guess: str) -> None:
         super().__init__(guess)
-
         self.__is_valid = self.isalpha()
 
     @property
