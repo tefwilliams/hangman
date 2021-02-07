@@ -9,9 +9,8 @@ def get_valid_guess(word: Word) -> Guess:
         try:
             return Guess(input("Please guess a letter or word: "), word)
 
-        except (AssertionError, ValueError):
-            print("\n" + "Not a valid guess" + "\n")
-            
+        except ValueError as e:
+            print(e)            
 
 def get_random_word() -> Word:
     word = random.choice(word_list)

@@ -9,18 +9,20 @@ class Guess(Word):
         super().__init__(guess)
         
         self.__word = word
-        self.__type = self.__get_type()
+        self.__validate_guess()
 
-    def __get_type(self: Guess) -> GuessType:
-        assert self.isalpha()
+    def __validate_guess(self: Guess) -> None:
+        if not self.isalpha():
+            raise ValueError("\n" + "Not a valid guess" + "\n")
 
-        if self.length == 1:
-            return GuessType.letter
+        elif self.length == 1:
+            self.__type = GuessType.letter
 
         elif self.length == self.__word.length:
-            return GuessType.word
+            self.__type = GuessType.word
 
-        raise ValueError
+        else:
+            raise ValueError("\n" + "Guess must be a letter or word" + "\n")
         
     @property
     def is_letter(self: Guess) -> bool:
