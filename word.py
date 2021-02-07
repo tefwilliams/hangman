@@ -6,7 +6,7 @@ class Word(str):
     def __new__(cls: type[Word], word: str, *args) -> Word:
         return super().__new__(cls, word.upper())
 
-    def __init__(self: Word, word: str, *args) -> None:
+    def __init__(self: Word, *args) -> None:
         self.__length = len(self)
 
     @property
