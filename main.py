@@ -19,7 +19,7 @@ def play(game: Game) -> None:
     if game.won():
         return print("Congrats, you guessed the word! You win! \n")
 
-    print("Sorry, you ran out of tries. The word was: %s. Maybe next time! \n" %word)
+    print("Sorry, you ran out of tries. The word was: %s. Maybe next time! \n" % word)
 
 
 def evaluate_guess(game: Game, guess: Guess) -> None:
@@ -29,11 +29,12 @@ def evaluate_guess(game: Game, guess: Guess) -> None:
         return print("You already guessed the letter", guess) if guess.is_letter else print("You already guessed the word", guess)
 
     elif guess not in word:
-        print(guess, "is not in the word.") if guess.is_letter else print(guess, "is not the word.")
+        print(guess, "is not in the word.") if guess.is_letter else print(
+            guess, "is not the word.")
         return game.made_incorrect_guess(guess)
 
     if guess.is_letter:
-        print("Good job,", guess, "is in the word!") 
+        print("Good job,", guess, "is in the word!")
 
     game.made_correct_guess(guess)
 
