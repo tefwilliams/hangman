@@ -1,24 +1,35 @@
-
 import random
-from word import Word
-from guess import Guess
 
 
-def get_valid_guess(word: Word) -> Guess:
+def get_alpha_string(input_text: str):
     while True:
         try:
-            return Guess(input("Please guess a letter or word: "), word)
+            output = input(input_text)
+
+            if not output.isalpha():
+                print("The input must be a letter or word.\n")
+                continue
+
+            return output
 
         except ValueError as e:
-            print(e)            
+            print(e)
 
-def get_random_word() -> Word:
-    word = random.choice(word_list)
-    return Word(word)
+
+def get_valid_guess():
+    return get_alpha_string("Please guess a letter or word: ")
+
+
+def get_random_word():
+    return random.choice(word_list)
 
 
 def display_hangman(tries: int) -> str:
     return game_stages[tries]
+
+
+def is_letter(guess: str):
+    return len(guess) == 1
 
 
 word_list = [
@@ -64,8 +75,8 @@ word_list = [
 
 
 game_stages = [
-        # final state: head, torso, both arms, and both legs
-        """
+    # final state: head, torso, both arms, and both legs
+    """
             --------
             |      |
             |      O
@@ -74,8 +85,8 @@ game_stages = [
             |     / \\
             -
         """,
-        # head, torso, both arms, and one leg
-        """
+    # head, torso, both arms, and one leg
+    """
             --------
             |      |
             |      O
@@ -84,8 +95,8 @@ game_stages = [
             |     / 
             -
         """,
-        # head, torso, and both arms
-        """
+    # head, torso, and both arms
+    """
             --------
             |      |
             |      O
@@ -94,8 +105,8 @@ game_stages = [
             |      
             -
         """,
-        # head, torso, and one arm
-        """
+    # head, torso, and one arm
+    """
             --------
             |      |
             |      O
@@ -104,8 +115,8 @@ game_stages = [
             |     
             -
         """,
-        # head and torso
-        """
+    # head and torso
+    """
             --------
             |      |
             |      O
@@ -114,8 +125,8 @@ game_stages = [
             |     
             -
         """,
-        # head
-        """
+    # head
+    """
             --------
             |      |
             |      O
@@ -124,8 +135,8 @@ game_stages = [
             |     
             -
         """,
-        # initial empty state
-        """
+    # initial empty state
+    """
             --------
             |      |
             |      
@@ -134,4 +145,4 @@ game_stages = [
             |     
             -
         """
-    ]
+]

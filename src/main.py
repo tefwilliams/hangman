@@ -1,48 +1,33 @@
-
-from __future__ import annotations
-from guess import Guess
-from game import Game
-from repository import display_hangman, get_valid_guess
+from game import Game, GuessResult
+from repository import get_valid_guess, is_letter
 
 
 def play(game: Game) -> None:
-    word = game.word
-
     print("Let's play Hangman!")
-    print_game_status(game)
 
-    while not (game.won() or game.lost()):
-        guess = get_valid_guess(word)
-        evaluate_guess(game, guess)
-        print_game_status(game)
+    while not (game.won or game.lost):
+        print(game.status)
+        guess = get_valid_guess()
+        result = game.guess(guess)
 
-    if game.won():
-        return print("Congrats, you guessed the word! You win! \n")
+        if result == GuessResult.PREVIOUSLY_MADE:
+            print(f"You already guessed the {"letter" if is_letter(
+                guess) else "word"} '{guess.capitalize()}'")
 
-    print("Sorry, you ran out of tries. The word was: %s. Maybe next time! \n" % word)
+        elif result == GuessResult.INCORRECT:
+            print(f"'{guess.capitalize()}' is not {
+                  "in" if is_letter(guess) else ""} the word.")
 
+        elif is_letter(guess):
+            print(f"Good job! '{guess.capitalize()}' is in the word!")
 
-def evaluate_guess(game: Game, guess: Guess) -> None:
-    word = game.word
+    if game.won:
+        print(game.status)
+        print("Congrats, you guessed the word! You win! \n")
 
-    if game.already_guessed(guess):
-        return print("You already guessed the letter", guess) if guess.is_letter else print("You already guessed the word", guess)
-
-    elif guess not in word:
-        print(guess, "is not in the word.") if guess.is_letter else print(
-            guess, "is not the word.")
-        return game.made_incorrect_guess(guess)
-
-    if guess.is_letter:
-        print("Good job,", guess, "is in the word!")
-
-    game.made_correct_guess(guess)
-
-
-def print_game_status(game: Game) -> None:
-    print(display_hangman(game.tries))
-    print(game.current_status)
-    print("\n")
+    else:
+        print("\nSorry, you ran out of tries. The word "
+              + f"was: {game.word}. Maybe next time! \n")
 
 
 play(Game())

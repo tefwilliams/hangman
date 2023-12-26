@@ -1,66 +1,69 @@
-
-from __future__ import annotations
-from word import Word
-from guess import Guess
-from repository import get_random_word
+from enum import Enum
+from repository import display_hangman, get_random_word, is_letter
 
 
 class Game:
     __tries = 6
-    __guessed_letters: list[str] = []
-    __guessed_words: list[str] = []
-    __current_status: str
+    __guesses = set()
 
-    def __init__(self: Game) -> None:
-        self.__word = get_random_word()
-        self.__current_status = '_' * self.__word.length
+    def __init__(self) -> None:
+        self.__word = get_random_word().upper()
 
-    def won(self: Game) -> bool:
+    @property
+    def won(self):
         return "_" not in self.__current_status
 
-    def lost(self: Game) -> bool:
+    @property
+    def lost(self) -> bool:
         return self.__tries == 0
 
-    def already_guessed(self: Game, guess: Guess) -> bool:
-        if guess.is_letter:
-            return guess in self.__guessed_letters
+    def guess(self, guess: str):
+        if not guess.isalpha():
+            raise ValueError("\nAll characters must be alphabetic")
 
-        return guess in self.__guessed_words
+        if guess.capitalize() in self.__guesses:
+            return GuessResult.PREVIOUSLY_MADE
 
-    def made_incorrect_guess(self: Game, guess: Guess) -> None:
-        self.__tries -= 1
+        self.__guesses.add(guess.upper())
 
-        if guess.is_letter:
-            return self.__guessed_letters.append(guess)
-            
-        self.__guessed_words.append(guess)
+        if not (
+            guess.upper() in self.__word
+            if is_letter(guess)
+            else guess.upper() == self.__word
+        ):
+            self.__tries -= 1
+            return GuessResult.INCORRECT
 
-    def made_correct_guess(self: Game, guess: Guess) -> None:
-        if guess.is_letter:
-            self.__guessed_letters.append(guess)
-            return self.__update_current_status(guess)
-
-        self.__current_status = self.__word
-
-    def __update_current_status(self: Game, guess: Guess) -> None:
-        current_status_as_list = list(self.__current_status)
-
-        indices = [i for i, letter in enumerate(self.__word) if letter == guess]
-
-        for index in indices:
-            current_status_as_list[index] = guess
-
-        self.__current_status = "".join(current_status_as_list)
+        return GuessResult.CORRECT
 
     @property
-    def tries(self: Game) -> int:
-        return self.__tries
+    def __current_status(self):
+        if self.__word in self.__guesses:
+            return self.__word
+
+        return "".join(
+            letter
+            if letter in self.__guesses
+            else "_"
+            for letter in self.__word
+        )
 
     @property
-    def current_status(self: Game) -> str:
-        return self.__current_status
+    def status(self):
+        return f"""
+{display_hangman(self.__tries)}
+
+{self.__current_status}
+
+{", ".join(sorted(self.__guesses))}
+"""
 
     @property
-    def word(self: Game) -> Word:
+    def word(self):
         return self.__word
-        
+
+
+class GuessResult(Enum):
+    CORRECT = 0
+    INCORRECT = 1
+    PREVIOUSLY_MADE = 2
